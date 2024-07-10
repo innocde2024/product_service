@@ -14,7 +14,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the build stage
-COPY --from=build /workspace/target/swp-be-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /workspace/target/product-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the port the app runs on
 EXPOSE 8081
