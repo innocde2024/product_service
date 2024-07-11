@@ -22,7 +22,16 @@ public class OrderController {
     private AuthService authService;
 
     @GetMapping("/orders")
-    public ResponseEntity<?> getAllOrders(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> getAllOrders() {
+        List<Order> list = orderService.getOrderList();
+        if(list == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/orders/users")
+    public ResponseEntity<?> getAllOrdersByUser(@RequestHeader("Authorization") String token) {
         UserDTO userDTO = authService.verifyToken(token);
         List<Order> list = orderService.getOrderListPersonal(userDTO.getId());
         if(list == null) {
