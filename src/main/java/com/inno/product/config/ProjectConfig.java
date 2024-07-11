@@ -9,16 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class ProjectConfig {
 
-    @Value("${allow.origin}")
-    private String allowedOrigins;
-
     @Bean
     WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(allowedOrigins)
+                        .allowedOrigins("http://3.25.86.54")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD");
             }
         };
