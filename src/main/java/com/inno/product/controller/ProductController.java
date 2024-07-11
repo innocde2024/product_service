@@ -1,13 +1,13 @@
 package com.inno.product.controller;
 
 import com.inno.product.entity.UserDTO;
+import com.inno.product.model.Product;
 import com.inno.product.service.auth.AuthService;
+import com.inno.product.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.inno.product.model.Product;
-import com.inno.product.service.product.ProductService;
 
 import java.util.List;
 
@@ -22,6 +22,16 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<?> getAll() {
         List<Product> listProducts = productService.getAll();
+        if (listProducts == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(listProducts);
+    }
+
+    @GetMapping("/products/suggest")
+    public ResponseEntity<?> getSuggestProducts(@RequestHeader("Authorization") String token) {
+        UserDTO userDTO = authService.verifyToken(token);
+        List<Product> listProducts = productService.getAllSuggestProduct(userDTO.getId());
         if (listProducts == null) {
             return ResponseEntity.badRequest().build();
         }

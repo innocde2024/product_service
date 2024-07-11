@@ -1,8 +1,8 @@
 package com.inno.product.service.category;
 
-import java.util.List;
-
 import com.inno.product.model.Category;
+
+import java.util.List;
 
 public interface CategoryService {
 

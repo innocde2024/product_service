@@ -1,16 +1,16 @@
 package com.inno.product.controller;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-
 import com.inno.product.entity.UserDTO;
+import com.inno.product.model.Order;
 import com.inno.product.service.auth.AuthService;
+import com.inno.product.service.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.inno.product.model.Order;
-import com.inno.product.service.order.OrderService;
+
+import java.util.Date;
+import java.util.List;
 
 @RestController
 public class OrderController {
@@ -31,10 +31,14 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<?> getOrder(@PathVariable String orderId) {
+    public ResponseEntity<?> getOrder(@PathVariable String orderId,@RequestHeader("Authorization") String token) {
+        UserDTO userDTO = authService.verifyToken(token);
+        List<Order> list = orderService.getOrderListPersonal(userDTO.getId());
         Order order = orderService.getOrderById(Integer.parseInt(orderId));
         if(order == null) {
             return ResponseEntity.badRequest().build();
+        } else if (list.contains(order)) {
+            return new ResponseEntity<>( "Can't access this order", HttpStatus.FORBIDDEN);
         }
         return ResponseEntity.ok(order);
     }

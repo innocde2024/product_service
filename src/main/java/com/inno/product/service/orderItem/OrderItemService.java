@@ -1,8 +1,8 @@
 package com.inno.product.service.orderItem;
 
-import java.util.List;
 import com.inno.product.model.OrderItem;
-import com.inno.product.model.Product;
+
+import java.util.List;
 
 public interface OrderItemService {
 
