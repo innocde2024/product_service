@@ -1,8 +1,10 @@
 package com.inno.product.service.orderItem;
 
+import com.inno.product.model.Order;
 import com.inno.product.model.OrderItem;
 import com.inno.product.model.Product;
 import com.inno.product.repository.OrderItemRepository;
+import com.inno.product.service.order.OrderService;
 import com.inno.product.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,19 +49,28 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public void returnItems(List<OrderItem> orderItems)  {
-        for (OrderItem orderItem: orderItems) {
-            Product product = orderItem.getProduct();
-            product.setQuantity(product.getQuantity() + orderItem.getQuantity());
-            orderItem.setQuantity(0);
-            orderItemRepository.save(orderItem);
-            productService.updateProduct(product);
-        }
-    }
-
-    @Override
     public List<OrderItem> getOrderItemListByOrderId(int orderId) {
         return orderItemRepository.getOrderItemsByOrder_OrderId(orderId);
     }
-    
+
+    @Override
+    public double calculatePrice(List<OrderItem> orderItems) {
+        double price = 0;
+        for (OrderItem orderItem : orderItems) {
+            price+=orderItem.getProduct().getPrice()*orderItem.getQuantity();
+        }
+        return price;
+    }
+
+    @Override
+    public OrderItem createOrderItemByProductIdAndQuantity(int productId, int quantity, Order order) {
+        Product product = productService.findById(productId);
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProduct(product);
+        orderItem.setQuantity(quantity);
+        orderItem.setOrder(order);
+        orderItem.setPrice(product.getPrice()*quantity);
+        orderItemRepository.save(orderItem);
+        return orderItem;
+    }
 }

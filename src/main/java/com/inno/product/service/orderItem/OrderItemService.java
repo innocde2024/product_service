@@ -1,5 +1,6 @@
 package com.inno.product.service.orderItem;
 
+import com.inno.product.model.Order;
 import com.inno.product.model.OrderItem;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface OrderItemService {
     OrderItem updateOrderItem(OrderItem orderItem);
 
     boolean deleteOrderItem(int orderItemId);
-    void returnItems(List<OrderItem> orderItems);
-    
+    double calculatePrice(List<OrderItem> orderItems);
+
+    OrderItem createOrderItemByProductIdAndQuantity(int productId, int quantity, Order order);
 }

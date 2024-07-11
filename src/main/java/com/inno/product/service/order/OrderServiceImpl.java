@@ -33,8 +33,8 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void addOrder(Order order) {
-        orderRepository.save(order);
+    public Order addOrder(Order order) {
+        return orderRepository.save(order);
     }
 
     @Override
@@ -45,26 +45,6 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void deleteOrder(int orderId) {
         orderRepository.delete(getOrderById(orderId));
-    }
-
-    @Override
-    public int calculateQuantity(Order order) {
-        int quantity = 0;
-        List<OrderItem> orderItems = orderItemService.getOrderItemListByOrderId(order.getOrderId());
-        for (OrderItem orderItem : orderItems) {
-            quantity+=orderItem.getQuantity();
-        }
-        return quantity;
-    }
-
-    @Override
-    public double calculatePrice(Order order) {
-        double price = 0;
-        List<OrderItem> orderItems = orderItemService.getOrderItemListByOrderId(order.getOrderId());
-        for (OrderItem orderItem : orderItems) {
-            price+=orderItem.getPrice()*orderItem.getQuantity();
-        }
-        return price;
     }
 
 }

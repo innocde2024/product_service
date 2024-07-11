@@ -1,5 +1,6 @@
 package com.inno.product.controller;
 
+import com.inno.product.entity.OrderDTO;
 import com.inno.product.entity.UserDTO;
 import com.inno.product.model.Order;
 import com.inno.product.service.auth.AuthService;
@@ -41,20 +42,5 @@ public class OrderController {
             return new ResponseEntity<>( "Can't access this order", HttpStatus.FORBIDDEN);
         }
         return ResponseEntity.ok(order);
-    }
-
-    @PostMapping("/orders")
-    public ResponseEntity<?> addOrder(@RequestHeader("Authorization") String token) {
-        UserDTO userDTO = authService.verifyToken(token);
-        try {
-        Order newOrder = new Order();
-        newOrder.setOrderDate(new Date());
-        newOrder.setUserId(userDTO.getId());
-        newOrder.setShipStatus("Pending");
-            orderService.addOrder(newOrder);
-            return ResponseEntity.ok(newOrder);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
     }
 }
